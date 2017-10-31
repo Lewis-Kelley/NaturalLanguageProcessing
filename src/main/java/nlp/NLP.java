@@ -28,21 +28,8 @@ public class NLP {
 
         	analyseTree(sentence);
 
-//          // this is the Stanford dependency graph of the current sentence
-          SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
-          System.out.println();
-          System.out.println(dependencies);
+        	analyseDependencies(sentence);
 
-          // get root of parse graph
-          IndexedWord root = dependencies.getFirstRoot();
-          // type of root
-          String type = root.tag();
-          switch (type) {
-	          case "VB": processVerbPhrase(dependencies, root); break;
-	          case "NN": processNounPhrase(dependencies, root); break;
-	          case "DT": processDeterminer(dependencies, root); break;
-	          default: System.out.println("Cannot identify sentence structure.");
-          }
           // next step, need to identify further components of sentence
 
 
@@ -105,16 +92,13 @@ public class NLP {
 
 	private static void analyseTree(CoreMap sentence) {
 		Tree tree = sentence.get(TreeAnnotation.class);
-          System.out.println();
-          System.out.println(tree);
+  		System.out.println();
+      	System.out.println(tree);
 	}
 
 	private static void analyseTokens(CoreLabel token) {
-		// this is the text of the token
 		String word = token.get(TextAnnotation.class);
-		// this is the POS tag of the token
 		String pos = token.get(PartOfSpeechAnnotation.class);
-		// this is the NER label of the token
 		String ne = token.get(NamedEntityTagAnnotation.class);
 		System.out.println("word: " + word + ", pos: " + pos + ", ne: " + ne);
 	}
@@ -140,6 +124,33 @@ public class NLP {
 			coreNLP.processFiles(fileCollection, true);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private static void analyseDependencies(CoreMap sentence) {
+		SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
+		System.out.println();
+		System.out.println(dependencies);
+
+		IndexedWord root = dependencies.getFirstRoot();
+		// type of root
+		String type = root.tag();
+		processType(dependencies, root, type);
+	}
+
+	private static void processType(SemanticGraph dependencies, IndexedWord root, String type) {
+		switch (type) {
+		case "VB":
+			processVerbPhrase(dependencies, root);
+			break;
+		case "NN":
+			processNounPhrase(dependencies, root);
+			break;
+		case "DT":
+			processDeterminer(dependencies, root);
+			break;
+		default:
+			System.out.println("Cannot identify sentence structure.");
 		}
 	}
 
@@ -170,5 +181,4 @@ public class NLP {
         System.out.println("Type of object: " + dobj.second.originalText().toLowerCase());
         System.out.println("Identity of object: " + newS.get(0).second.originalText().toLowerCase());
       }
-
 }
