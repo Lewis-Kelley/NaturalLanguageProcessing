@@ -81,6 +81,7 @@ public class NLP {
 		printHeader("Analysing Dependencies");
 		DependencyAnalyzer dependencies = new DependencyAnalyzer(sentence);
 		dependencies.analyseDependencies();
+		dependencies.analyseRelations();
 	}
 
 	private static void analyseCorefChain(Annotation document) {
