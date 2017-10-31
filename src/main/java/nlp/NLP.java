@@ -1,5 +1,6 @@
 package nlp;
 
+import java.io.*;
 import java.util.*;
 
 import edu.stanford.nlp.ling.*;
@@ -7,68 +8,25 @@ import edu.stanford.nlp.ling.CoreAnnotations.*;
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
-import edu.stanford.nlp.trees.GrammaticalRelation;
+import edu.stanford.nlp.trees.*;
+import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.*;
 
 
 public class NLP {
-
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
+        StanfordCoreNLP pipeline = createCore();
 
-        Properties props = new Properties();
-        props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-//        props.put("annotators", "tokenize, ssplit, pos, lemma");
-
-
-
-//  		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
-//        File foo = new File("foo.txt");
-//        Collection<File> files = new ArrayList<File>();
-//        files.add(foo);
-//        try {
-//			coreNLP.processFiles(files);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        // read some text in the text variable
-        String text = "Pick up that block";
-//        String text = "In 1921, Einstein received the Nobel Prize for his original work on the photoelectric effect.";
-//        String text = "Did Einstein receive the Nobel Prize?";
-//        String text = "Mary saw a ring through the window and asked John for it.";
-        // create an empty Annotation just with the given text
-        Annotation document = new Annotation(text);
-
-        // run all Annotators on this text
-        pipeline.annotate(document);
+        Annotation document = processString(pipeline, "Pick up that block.");
 
         // these are all the sentences in this document
         // a CoreMap is essentially a Map that uses class objects as keys and has values with custom types
         List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 
-        for(CoreMap sentence: sentences) {
-          // traversing the words in the current sentence
-          // a CoreLabel is a CoreMap with additional token-specific methods
-          for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-            // this is the text of the token
-            String word = token.get(TextAnnotation.class);
-            // this is the POS tag of the token
-            String pos = token.get(PartOfSpeechAnnotation.class);
-            // this is the NER label of the token
-            String ne = token.get(NamedEntityTagAnnotation.class);
-//            System.out.println("word " + word + " ,pos: " + pos + " ,ne: " + ne);
-          }
+        for(CoreMap sentence : sentences) {
+        	sentence.get(TokensAnnotation.class).forEach(NLP::analyseTokens);
 
-//          // this is the parse tree of the current sentence
-//          Tree tree = sentence.get(TreeAnnotation.class);
-//          System.out.println();
-//          System.out.println(tree);
+        	analyseTree(sentence);
 
 //          // this is the Stanford dependency graph of the current sentence
           SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
@@ -145,15 +103,55 @@ public class NLP {
 
     }
 
+	private static void analyseTree(CoreMap sentence) {
+		Tree tree = sentence.get(TreeAnnotation.class);
+          System.out.println();
+          System.out.println(tree);
+	}
+
+	private static void analyseTokens(CoreLabel token) {
+		// this is the text of the token
+		String word = token.get(TextAnnotation.class);
+		// this is the POS tag of the token
+		String pos = token.get(PartOfSpeechAnnotation.class);
+		// this is the NER label of the token
+		String ne = token.get(NamedEntityTagAnnotation.class);
+		System.out.println("word: " + word + ", pos: " + pos + ", ne: " + ne);
+	}
+
+	private static Annotation processString(StanfordCoreNLP pipeline, String text) {
+        Annotation document = new Annotation(text);
+        pipeline.annotate(document);
+		return document;
+	}
+
+	private static StanfordCoreNLP createCore() {
+		Properties props = new Properties();
+        props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+
+        return new StanfordCoreNLP(props);
+	}
+
+	private static void processFile(StanfordCoreNLP coreNLP, File file) {
+		Collection<File> fileCollection = new ArrayList<File>();
+		fileCollection.add(file);
+
+		try {
+			coreNLP.processFiles(fileCollection, true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
     // Processes: {This, that} one?
-    static public void processDeterminer(SemanticGraph dependencies, IndexedWord root){
+    public static void processDeterminer(SemanticGraph dependencies, IndexedWord root){
         List<Pair<GrammaticalRelation,IndexedWord>> s = dependencies.childPairs(root);
 
         System.out.println("Identity of object: " + root.originalText().toLowerCase());
       }
 
     //Processes: {That, this, the} {block, sphere}
-    static public void processNounPhrase(SemanticGraph dependencies, IndexedWord root){
+    public static void processNounPhrase(SemanticGraph dependencies, IndexedWord root){
       List<Pair<GrammaticalRelation,IndexedWord>> s = dependencies.childPairs(root);
 
       System.out.println("Identity of object: " + root.originalText().toLowerCase());
@@ -161,7 +159,7 @@ public class NLP {
     }
 
     // Processes: {Pick up, put down} {that, this} {block, sphere}
-    static public void processVerbPhrase(SemanticGraph dependencies, IndexedWord root){
+    public static void processVerbPhrase(SemanticGraph dependencies, IndexedWord root){
         List<Pair<GrammaticalRelation,IndexedWord>> s = dependencies.childPairs(root);
         Pair<GrammaticalRelation,IndexedWord> prt = s.get(0);
         Pair<GrammaticalRelation,IndexedWord> dobj = s.get(1);
