@@ -6,7 +6,9 @@ import java.util.*;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
+import nlp.analyzers.TreeAnalyzer;
 
 public class NLP {
 	public static void main(String[] args) {
@@ -21,6 +23,9 @@ public class NLP {
 
 		for (CoreMap sentence : sentences) {
 			analyzeDependencies(sentence);
+			Collection<Frame> frames = new TreeAnalyzer(sentence.get(TreeAnnotation.class)).analyze();
+			for (Frame frame : frames)
+				System.out.println(frame);
 		}
 	}
 
