@@ -64,11 +64,11 @@ public class DependencyAnalyzer {
 		Pair<GrammaticalRelation, IndexedWord> prt = s.get(0);
 		Pair<GrammaticalRelation, IndexedWord> dobj = s.get(1);
 
-		List<Pair<GrammaticalRelation, IndexedWord>> newS = dependencies.childPairs(dobj.second());
+		//List<Pair<GrammaticalRelation, IndexedWord>> newS = dependencies.childPairs(dobj.second());
 
-		System.out.println(
-				"Action: " + root.originalText().toLowerCase() + " " + prt.second().originalText().toLowerCase());
+		System.out.println("Action: " + root.originalText().toLowerCase()
+				            + " " + prt.second().originalText().toLowerCase());
 		System.out.println("Type of object: " + dobj.second().originalText().toLowerCase());
-		System.out.println("Identity of object: " + newS.get(0).second().originalText().toLowerCase());
+		//System.out.println("Identity of object: " + newS.get(0).second().originalText().toLowerCase());
 	}
 }

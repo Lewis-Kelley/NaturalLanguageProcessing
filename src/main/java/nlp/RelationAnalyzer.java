@@ -11,24 +11,21 @@ public class RelationAnalyzer {
 	private SemanticGraph dependencies;
 	private IndexedWord subject;
 	private String quantifier;
-	private Boolean goodToGo;
 	private Boolean topLevelNegation ;
 	private Boolean predicateLevelNegation;
 
 	public RelationAnalyzer(SemanticGraph dependencies) {
 		this.dependencies = dependencies;
-
 		subject = null;
 		quantifier = null;
-		goodToGo = false;
 		topLevelNegation = false;
 		predicateLevelNegation = false;
 	}
 
 	public void detailedAnalysis() {
-		parseDeclaratives();
+		boolean status = parseDeclaratives();
 
-		if (goodToGo) {
+		if (status) {
 			parseModifiers();
 			System.out.println(buildOutput());
 		} else {
@@ -36,8 +33,10 @@ public class RelationAnalyzer {
 		}
 	}
 
-	private void parseDeclaratives() {
+	private boolean parseDeclaratives() {
+		boolean status = false;
 		List<Pair<GrammaticalRelation, IndexedWord>> relationWords = dependencies.childPairs(dependencies.getFirstRoot());
+
 		for (Pair<GrammaticalRelation, IndexedWord> relationWord : relationWords) {
 			GrammaticalRelation relation = relationWord.first();
 			IndexedWord word = relationWord.second();
@@ -48,12 +47,14 @@ public class RelationAnalyzer {
 			if (relation.toString().equals("cop")
 					&& (relationWord.second.originalText().toLowerCase().equals("are")
 					    || relationWord.second.originalText().toLowerCase().equals("is"))) {
-				goodToGo = true;
+				status = true;
 			}
 			if (relation.toString().equals("neg")) {
 				predicateLevelNegation = true;
 			}
 		}
+
+		return status;
 	}
 
 	private void parseModifiers() {
