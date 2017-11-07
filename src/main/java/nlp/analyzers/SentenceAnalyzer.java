@@ -31,15 +31,22 @@ public class SentenceAnalyzer implements Analyzer {
 	public Collection<Frame> analyze() {
 		List<Frame> frames = new LinkedList<>();
 
+		if (nounPhrase == null || verbPhrase == null)
+			return frames;
+
 		List<String> nounObjects = nounPhrase.getNouns();
 		List<Pair<String, List<String>>> verbObjects = verbPhrase.getVerbs();
 
 		for (String subject : nounObjects) {
 			for (Pair<String, List<String>> verbObject : verbObjects) {
 				String verb = verbObject.first();
-				frames.add(new Frame(subject, verb));
-				for (String object : verbObject.second()) {
-					frames.add(new Frame(subject, verb, object));
+				List<String> objects = verbObject.second();
+				if (objects.isEmpty()) {
+					frames.add(new Frame(subject, verb));
+				} else {
+					for (String object : objects) {
+						frames.add(new Frame(subject, verb, object));
+					}
 				}
 			}
 		}

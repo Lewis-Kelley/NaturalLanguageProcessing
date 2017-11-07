@@ -11,7 +11,7 @@ import nlp.analyzers.TreeAnalyzer;
 
 public class NLP {
 	public static void main(String[] args) throws IOException {
-		String filename = "mini_abraham_lincoln";
+		String filename = "lincoln cleaned";
 
 		Parser parser = new Parser();
 		FileOutputStream fileOut = new FileOutputStream(new File("resources/" + filename + ".dat"));
