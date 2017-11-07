@@ -33,6 +33,12 @@ public enum PartOfSpeech {
 			return "NN";
 		}
 	},
+	PERSONAL_PRONOUN {
+		@Override
+		public String toString() {
+			return "PRP";
+		}
+	},
 	PLURAL_NOUN {
 		@Override
 		public String toString() {
