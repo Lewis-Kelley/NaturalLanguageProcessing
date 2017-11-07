@@ -12,7 +12,6 @@ public class SentenceAnalyzer implements Analyzer {
 
 	public SentenceAnalyzer(Tree tree) {
 		sentence = tree;
-		System.out.println(sentence);
 		sentence.getChildrenAsList().forEach(this::findVerbPhrase);
 		sentence.getChildrenAsList().forEach(this::findNounPhrase);
 	}
@@ -31,7 +30,7 @@ public class SentenceAnalyzer implements Analyzer {
 	public Collection<Frame> analyze() {
 		List<Frame> frames = new LinkedList<>();
 
-		frames.add(new Frame(nounPhrase.getNoun(), verbPhrase.getVerb()));
+		frames.add(new Frame(nounPhrase.getNoun(), verbPhrase.getVerb(), verbPhrase.getObject()));
 
 		return frames;
 	}
