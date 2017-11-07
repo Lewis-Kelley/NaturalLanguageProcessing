@@ -22,6 +22,11 @@ public class SearchFrames {
 			if (line.equals(""))
 				break;
 
+			if (line.equals("DEBUG")) {
+				System.out.println(frames);
+				continue;
+			}
+
 			Annotation annotation = parser.processString(line);
 			List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);
 			TreeAnalyzer analyzer = new TreeAnalyzer(sentences.get(0).get(TreeAnnotation.class));
@@ -38,7 +43,7 @@ public class SearchFrames {
 
 	@SuppressWarnings("unchecked")
 	private static Collection<Frame> loadFrames() throws IOException, FileNotFoundException, ClassNotFoundException {
-		ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream("sample.dat"));
+		ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream("resources/mini_abraham_lincoln.dat"));
 		Collection<Frame> frames = (Collection<Frame>) objectIn.readObject();
 		objectIn.close();
 

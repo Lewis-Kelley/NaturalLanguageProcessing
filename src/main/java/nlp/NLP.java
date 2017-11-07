@@ -11,10 +11,13 @@ import nlp.analyzers.TreeAnalyzer;
 
 public class NLP {
 	public static void main(String[] args) throws IOException {
-		Parser parser = new Parser();
-		FileOutputStream fileOut = new FileOutputStream(new File("resources/abraham_lincoln.dat"));
+		String filename = "mini_abraham_lincoln";
 
-		Annotation document = parser.processFile(new File("resources/abraham_lincoln.txt"));
+		Parser parser = new Parser();
+		FileOutputStream fileOut = new FileOutputStream(new File("resources/" + filename + ".dat"));
+
+		Annotation document = parser.processFile(new File("resources/" + filename + ".txt"));
+		System.out.println("Finished parsing.");
 
 		// these are all the sentences in this document
 		// a CoreMap is essentially a Map that uses class objects as keys and has values
@@ -30,6 +33,8 @@ public class NLP {
 		ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 		objectOut.writeObject(frames);
 		objectOut.close();
+
+		System.out.println("Done!");
 	}
 
 	private static void analyzeDependencies(CoreMap sentence) {

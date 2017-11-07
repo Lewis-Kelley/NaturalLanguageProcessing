@@ -1,6 +1,6 @@
 package nlp.analyzers;
 
-import java.util.Collection;
+import java.util.*;
 
 import edu.stanford.nlp.trees.Tree;
 import nlp.*;
@@ -21,6 +21,9 @@ public class RootAnalyzer implements Analyzer {
 
 	@Override
 	public Collection<Frame> analyze() {
-		return sentence.analyze();
+		if (sentence == null)
+			return new LinkedList<Frame>();
+		else
+			return sentence.analyze();
 	}
 }

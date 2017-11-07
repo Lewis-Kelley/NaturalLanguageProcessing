@@ -9,10 +9,16 @@ public class Frame implements Serializable {
 	public String verb;
 	public String object;
 
+	public Frame(String subject, String verb) {
+		this.subject = subject.toLowerCase();
+		this.verb = verb.toLowerCase();
+		this.object = "";
+	}
+
 	public Frame(String subject, String verb, String object) {
-		this.subject = subject;
-		this.verb = verb;
-		this.object = object;
+		this.subject = subject.toLowerCase();
+		this.verb = verb.toLowerCase();
+		this.object = object.toLowerCase();
 	}
 
 	@Override

@@ -1,12 +1,16 @@
 package nlp.analyzers;
 
+import java.util.*;
+
 import edu.stanford.nlp.trees.Tree;
-import nlp.PartOfSpeech;
+import nlp.*;
 
 public class NounPhraseAnalyzer {
-	private Tree subject;
+	private List<Tree> nouns;
+	private NounPhraseAnalyzer nestedNoun;
 
 	public NounPhraseAnalyzer(Tree tree) {
+		nouns = new LinkedList<>();
 		tree.getChildrenAsList().forEach(this::findSubject);
 	}
 
@@ -16,10 +20,20 @@ public class NounPhraseAnalyzer {
 				                       PartOfSpeech.SINGULAR_NOUN,
 				                       PartOfSpeech.PROPER_NOUN,
 				                       PartOfSpeech.PERSONAL_PRONOUN))
-			subject = child;
+			nouns.add(child);
+		if (child.value().equals(Phrases.NOUN_PHRASE.toString()))
+			nestedNoun = new NounPhraseAnalyzer(child);
 	}
 
-	public String getNoun() {
-		return subject.getChild(0).toString();
+	public List<String> getNouns() {
+		List<String> nounResults = new LinkedList<>();
+
+		for (Tree noun : nouns)
+			nounResults.add(noun.getChild(0).toString());
+
+		if (nestedNoun != null)
+			nounResults.addAll(nestedNoun.getNouns());
+
+		return nounResults;
 	}
 }

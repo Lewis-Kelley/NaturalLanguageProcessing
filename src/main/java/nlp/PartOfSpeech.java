@@ -63,6 +63,12 @@ public enum PartOfSpeech {
 			return "VB";
 		}
 	},
+	VERB_PAST_TENSE {
+		@Override
+		public String toString() {
+			return "VBD";
+		}
+	},
 	VERB_PRESENT {
 		@Override
 		public String toString() {

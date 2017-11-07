@@ -3,6 +3,7 @@ package nlp.analyzers;
 import java.util.*;
 
 import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.util.Pair;
 import nlp.*;
 
 public class SentenceAnalyzer implements Analyzer {
@@ -30,7 +31,18 @@ public class SentenceAnalyzer implements Analyzer {
 	public Collection<Frame> analyze() {
 		List<Frame> frames = new LinkedList<>();
 
-		frames.add(new Frame(nounPhrase.getNoun(), verbPhrase.getVerb(), verbPhrase.getObject()));
+		List<String> nounObjects = nounPhrase.getNouns();
+		List<Pair<String, List<String>>> verbObjects = verbPhrase.getVerbs();
+
+		for (String subject : nounObjects) {
+			for (Pair<String, List<String>> verbObject : verbObjects) {
+				String verb = verbObject.first();
+				frames.add(new Frame(subject, verb));
+				for (String object : verbObject.second()) {
+					frames.add(new Frame(subject, verb, object));
+				}
+			}
+		}
 
 		return frames;
 	}
