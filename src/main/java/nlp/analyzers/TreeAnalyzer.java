@@ -19,4 +19,13 @@ public class TreeAnalyzer implements Analyzer {
 	public Collection<Frame> analyze() {
 		return root.analyze();
 	}
+
+	public static boolean treeIs(Tree tree, PartOfSpeech... parts) {
+		for (PartOfSpeech part : parts) {
+			if (tree.value().equals(part.toString()))
+				return true;
+		}
+
+		return false;
+	}
 }
