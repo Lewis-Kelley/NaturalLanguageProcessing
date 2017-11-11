@@ -1,6 +1,6 @@
 package nlp.analyzers;
 
-import java.util.Collection;
+import java.util.*;
 
 import edu.stanford.nlp.trees.Tree;
 import nlp.*;
@@ -17,7 +17,7 @@ public class TreeAnalyzer implements Analyzer {
 
 	@Override
 	public Collection<Frame> analyze() {
-		return root.analyze();
+		return root == null ? new LinkedList<>() : root.analyze();
 	}
 
 	public static boolean treeIs(Tree tree, PartOfSpeech... parts) {
