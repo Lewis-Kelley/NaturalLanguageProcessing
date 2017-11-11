@@ -11,7 +11,7 @@ import nlp.analyzers.TreeAnalyzer;
 
 public class NLP {
 	public static void main(String[] args) throws IOException {
-		String filename = "lincoln cleaned";
+		String filename = "sample";
 
 		Parser parser = new Parser();
 		FileOutputStream fileOut = new FileOutputStream(new File("resources/" + filename + ".dat"));
@@ -24,12 +24,21 @@ public class NLP {
 		// with custom types
 		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 		Collection<Frame> frames = new LinkedList<>();
-
+		float sentenceNum = sentences.size();
+		int parsed = 0;
 		for (CoreMap sentence : sentences) {
 			//analyzeDependencies(sentence);
-			frames.addAll(new TreeAnalyzer(sentence.get(TreeAnnotation.class)).analyze());
+			Collection<Frame> treeFrames = new TreeAnalyzer(sentence.get(TreeAnnotation.class)).analyze();
+			if(!treeFrames.isEmpty()){
+				parsed++;
+			}
+			else{
+				System.out.println("failed to analyze: "+ sentence);
+			}
+			
+			frames.addAll(treeFrames);
 		}
-
+		System.out.println("success eval: " + parsed/sentenceNum*100+"%");
 		ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 		objectOut.writeObject(frames);
 		objectOut.close();
