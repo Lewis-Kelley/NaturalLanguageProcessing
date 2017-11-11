@@ -11,7 +11,8 @@ import nlp.analyzers.TreeAnalyzer;
 
 public class SearchFrames {
 	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
-		Collection<Frame> frames = loadFrames();
+		Set<Frame> frames = new HashSet<>();
+		frames.addAll(loadFrames());
 
 		Scanner scanner = new Scanner(System.in);
 		Parser parser = new Parser();
