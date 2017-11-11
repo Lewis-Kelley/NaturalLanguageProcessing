@@ -5,13 +5,14 @@ import java.util.*;
 
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 import nlp.analyzers.TreeAnalyzer;
 
 public class NLP {
 	public static void main(String[] args) throws IOException {
-		String filename = "sample";
+		String filename = "lincoln cleaned";
 
 		Parser parser = new Parser();
 		FileOutputStream fileOut = new FileOutputStream(new File("resources/" + filename + ".dat"));
@@ -28,14 +29,15 @@ public class NLP {
 		int parsed = 0;
 		for (CoreMap sentence : sentences) {
 			//analyzeDependencies(sentence);
-			Collection<Frame> treeFrames = new TreeAnalyzer(sentence.get(TreeAnnotation.class)).analyze();
+			Tree tree = sentence.get(TreeAnnotation.class);
+			Collection<Frame> treeFrames = new TreeAnalyzer(tree).analyze();
 			if(!treeFrames.isEmpty()){
 				parsed++;
 			}
 			else{
-				System.out.println("failed to analyze: "+ sentence);
+				System.out.println("failed to analyze: " + sentence + "\n" + tree + "\n");
 			}
-			
+
 			frames.addAll(treeFrames);
 		}
 		System.out.println("success eval: " + parsed/sentenceNum*100+"%");
