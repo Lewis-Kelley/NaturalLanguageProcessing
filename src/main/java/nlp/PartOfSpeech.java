@@ -21,6 +21,12 @@ public enum PartOfSpeech {
 			return "DT";
 		}
 	},
+	THERE {
+		@Override
+		public String toString() {
+			return "EX";
+		}
+	},
 	ADJECTIVE {
 		@Override
 		public String toString() {

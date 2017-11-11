@@ -15,8 +15,9 @@ public class NounPhraseAnalyzer {
 	}
 
 	private void findSubject(Tree child) {
-		if (TreeAnalyzer.treeIs(child, PartOfSpeech.ADJECTIVE,
-									   PartOfSpeech.DETERMINER,
+		if (TreeAnalyzer.treeIs(child, PartOfSpeech.DETERMINER,
+									   PartOfSpeech.THERE,
+									   PartOfSpeech.ADJECTIVE,
 									   PartOfSpeech.PLURAL_NOUN,
 				                       PartOfSpeech.PLURAL_PROPER_NOUN,
 				                       PartOfSpeech.SINGULAR_NOUN,
