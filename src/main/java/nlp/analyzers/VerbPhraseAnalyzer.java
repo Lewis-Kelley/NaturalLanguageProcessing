@@ -22,6 +22,8 @@ public class VerbPhraseAnalyzer {
 				                       PartOfSpeech.VERB_PRESENT,
 				                       PartOfSpeech.VERB_PAST_TENSE))
 			verb = child;
+		else if (child.value().equals(Phrases.VERB_PHRASE.toString()))
+			verbPhrases.add(new VerbPhraseAnalyzer(child));
 	}
 
 	private void findObject(Tree child) {
