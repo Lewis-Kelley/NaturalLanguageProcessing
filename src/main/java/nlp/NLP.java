@@ -40,7 +40,7 @@ public class NLP {
 
 			frames.addAll(treeFrames);
 		}
-		System.out.println("success eval: " + parsed/sentenceNum*100+"%");
+		System.out.println("successfully evaluated: " + Math.round(parsed / sentenceNum * 100) + "%");
 		ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 		objectOut.writeObject(frames);
 		objectOut.close();
