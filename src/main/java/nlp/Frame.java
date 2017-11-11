@@ -41,4 +41,9 @@ public class Frame implements Serializable {
 				&& verb.equals(other.verb)
 				&& object.equals(other.object);
 	}
+
+	@Override
+	public int hashCode() {
+		return subject.hashCode() + 13*verb.hashCode() + 67*object.hashCode();
+	}
 }
