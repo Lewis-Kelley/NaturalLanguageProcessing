@@ -8,13 +8,18 @@ import nlp.*;
 
 public class SentenceAnalyzer implements Analyzer {
 	private Tree sentence;
+	private List<SentenceAnalyzer> subSentences;
 	private VerbPhraseAnalyzer verbPhrase;
 	private NounPhraseAnalyzer nounPhrase;
 
 	public SentenceAnalyzer(Tree tree) {
 		sentence = tree;
-		sentence.getChildrenAsList().forEach(this::findVerbPhrase);
-		sentence.getChildrenAsList().forEach(this::findNounPhrase);
+		List<Tree> children = sentence.getChildrenAsList();
+		children.forEach(this::findVerbPhrase);
+		children.forEach(this::findNounPhrase);
+
+		subSentences = new LinkedList<>();
+		children.forEach(this::findSubSentences);
 	}
 
 	private void findVerbPhrase(Tree child) {
@@ -27,9 +32,17 @@ public class SentenceAnalyzer implements Analyzer {
 			nounPhrase = new NounPhraseAnalyzer(child);
 	}
 
+	private void findSubSentences(Tree child) {
+		if (child.value().equals(Phrases.SENTENCE.toString()))
+			subSentences.add(new SentenceAnalyzer(child));
+	}
+
 	@Override
 	public Collection<Frame> analyze() {
 		List<Frame> frames = new LinkedList<>();
+
+		for (SentenceAnalyzer subSentence : subSentences)
+			frames.addAll(subSentence.analyze());
 
 		if (nounPhrase == null || verbPhrase == null)
 			return frames;
