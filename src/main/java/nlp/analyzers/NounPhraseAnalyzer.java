@@ -15,11 +15,14 @@ public class NounPhraseAnalyzer {
 	}
 
 	private void findSubject(Tree child) {
-		if (TreeAnalyzer.treeIs(child, PartOfSpeech.PLURAL_NOUN,
+		if (TreeAnalyzer.treeIs(child, PartOfSpeech.ADJECTIVE,
+									   PartOfSpeech.DETERMINER,
+									   PartOfSpeech.PLURAL_NOUN,
 				                       PartOfSpeech.PLURAL_PROPER_NOUN,
 				                       PartOfSpeech.SINGULAR_NOUN,
 				                       PartOfSpeech.PROPER_NOUN,
-				                       PartOfSpeech.PERSONAL_PRONOUN))
+				                       PartOfSpeech.PERSONAL_PRONOUN,
+				                       PartOfSpeech.WH_PRONOUN))
 			nouns.add(child);
 		if (child.value().equals(Phrases.NOUN_PHRASE.toString()))
 			nestedNoun = new NounPhraseAnalyzer(child);

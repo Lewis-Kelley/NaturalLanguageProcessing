@@ -19,8 +19,11 @@ public class VerbPhraseAnalyzer {
 
 	private void findVerbs(Tree child) {
 		if (TreeAnalyzer.treeIs(child, PartOfSpeech.VERB_BASE_FORM,
-				                       PartOfSpeech.VERB_PRESENT,
-				                       PartOfSpeech.VERB_PAST_TENSE))
+				                       PartOfSpeech.VERB_PAST_TENSE,
+				                       PartOfSpeech.VERB_GERUND,
+				                       PartOfSpeech.VERB_PAST_PARTICIPLE,
+				                       PartOfSpeech.VERB_1ST_PRESENT,
+				                       PartOfSpeech.VERB_3RD_PRESENT))
 			verb = child;
 		else if (child.value().equals(Phrases.VERB_PHRASE.toString()))
 			verbPhrases.add(new VerbPhraseAnalyzer(child));

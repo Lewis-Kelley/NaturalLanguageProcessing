@@ -33,12 +33,6 @@ public enum PartOfSpeech {
 			return "NN";
 		}
 	},
-	PERSONAL_PRONOUN {
-		@Override
-		public String toString() {
-			return "PRP";
-		}
-	},
 	PLURAL_NOUN {
 		@Override
 		public String toString() {
@@ -57,6 +51,12 @@ public enum PartOfSpeech {
 			return "NNPS";
 		}
 	},
+	PERSONAL_PRONOUN {
+		@Override
+		public String toString() {
+			return "PRP";
+		}
+	},
 	VERB_BASE_FORM {
 		@Override
 		public String toString() {
@@ -69,10 +69,34 @@ public enum PartOfSpeech {
 			return "VBD";
 		}
 	},
-	VERB_PRESENT {
+	VERB_GERUND {
+		@Override
+		public String toString() {
+			return "VBG";
+		}
+	},
+	VERB_PAST_PARTICIPLE {
+		@Override
+		public String toString() {
+			return "VBN";
+		}
+	},
+	VERB_1ST_PRESENT {
 		@Override
 		public String toString() {
 			return "VBP";
+		}
+	},
+	VERB_3RD_PRESENT {
+		@Override
+		public String toString() {
+			return "VBZ";
+		}
+	},
+	WH_PRONOUN {
+		@Override
+		public String toString() {
+			return "WP";
 		}
 	}
 }
